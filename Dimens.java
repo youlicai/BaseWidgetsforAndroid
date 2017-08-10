@@ -10,13 +10,13 @@ import java.io.PrintWriter;
 public class Dimens {
 
     //基数越大越准
-    private int BASE=160;
+    private final static int BASE=160;
     private final static String Template = "<dimen name=\"dimens_{0}\">{1}px</dimen>\n";
     private final static String VALUE_TEMPLATE = "values-{0}x{1}";
     private final static String FILE_NAME = "dimens.xml";
-    private String dirStr = "./res";
+    private final static String dirStr = "./res";
 
-    public void generateXmlFile(Context context) {
+    public static void generateXmlFile(Context context) {
         DisplayMetrics dm2 = context.getResources().getDisplayMetrics();
         int Width = dm2.widthPixels;
         int Height = dm2.heightPixels;
