@@ -23,7 +23,9 @@ public class Dimens {
             sbForWidth.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
             sbForWidth.append("<resources>");
             String[] xy=px.split("x");
-            float cell =Integer.parseInt(xy[0])  * 1.0f / BASE;
+            int width=Integer.parseInt(xy[0]);
+            int height=Integer.parseInt(xy[1]);
+            float cell =width * 1.0f / BASE;
 
             for (int i = 1; i < BASE; i++) {
                 sbForWidth.append(Template.replace("{0}", i + "").replace("{1}",
@@ -31,7 +33,7 @@ public class Dimens {
             }
 
             sbForWidth.append(Template.replace("{0}", BASE + "").replace("{1}",
-                    xy[0] + ""));
+                    width + ""));
 
             sbForWidth.append("</resources>");
 
@@ -41,7 +43,7 @@ public class Dimens {
 
 
             File fileDir = new File(dirStr + File.separator
-                    + VALUE_TEMPLATE.replace("{0}", xy[1] + "").replace("{1}", xy[0] + ""));
+                    + VALUE_TEMPLATE.replace("{0}", height + "").replace("{1}", width + ""));
             fileDir.mkdir();
 
             File file = new File(fileDir.getAbsolutePath(), FILE_NAME);
