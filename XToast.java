@@ -5,17 +5,17 @@ import android.graphics.drawable.GradientDrawable;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MyToast {
+public class XToast {
 
 	private static long lastTime = 0;
 	private static Toast toast;
-
+	private final static GradientDrawable backGround = new GradientDrawable();//创建drawable
 	public static void showToast(Context context, String text) {
 		if (showTime()) {
 			TextView textView=new TextView(context);
 
 			int roundRadius = 15; //圆角半径
-			GradientDrawable backGround = new GradientDrawable();//创建drawable
+
 			backGround.setColor(Color.BLACK);
 			backGround.setCornerRadius(roundRadius);
 			backGround.setStroke(5,Color.BLACK);
