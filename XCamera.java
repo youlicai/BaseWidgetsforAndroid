@@ -6,21 +6,34 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 
 public class XCamera {
 
     public final static int REQUEST_CODE_PICK_IMAGE=001;
     public final static int REQUEST_CODE_CAPTURE =002;
     public final static int REQUEST_CODE_CROP =003;
-    static String IMAGE_PATH = Environment.getExternalStorageDirectory() + File.separator +"photo.jpg";
+
+
+    private final static int outputX=300;
+    private final static int outputY=300;
+
+    //拍照路径
+    static String IMAGE_PATH = Environment.getExternalStorageDirectory() + File.separator +String.valueOf(Calendar.getInstance().get(Calendar.SECOND))+"photo.jpg";
+    //截图路径
+    private static Uri IMAGEURI=null;
+
 
     public static void takePicturePhoto(Activity activity){
+        IMAGEURI=Uri.parse("file:///sdcard/"+String.valueOf(Calendar.getInstance().get(Calendar.SECOND))+"temp.jpg");
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
@@ -28,6 +41,7 @@ public class XCamera {
     }
 
     public static void takePictureCamera(Activity c){
+        IMAGEURI=Uri.parse("file:///sdcard/"+String.valueOf(Calendar.getInstance().get(Calendar.SECOND))+"temp.jpg");
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(IMAGE_PATH)));
         c.startActivityForResult(intent, REQUEST_CODE_CAPTURE);
@@ -36,8 +50,8 @@ public class XCamera {
     /**
      * 裁剪选择图片
      **/
-    public static void cropPickImage(Activity activity,Intent data) {
-        IMAGE_PATH=XCamera.getPath(activity,data.getData());
+    public static void cropPickImage(Activity activity,Uri uri) {
+        IMAGE_PATH=XCamera.getPath(activity,uri);
         cropImage(activity);
     }
 
@@ -52,14 +66,18 @@ public class XCamera {
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 160);
-        intent.putExtra("outputY", 160);
-        intent.putExtra("return-data", true);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        intent.putExtra("outputX", outputX);
+        intent.putExtra("outputY", outputY);
+        intent.putExtra("return-data", false);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, IMAGEURI);
         activity.startActivityForResult(intent, XCamera.REQUEST_CODE_CROP);
     }
 
 
+
+    public static Uri getUri(){
+        return IMAGEURI;
+    }
     public static  String getImagePath(){
         return IMAGE_PATH;
     }
