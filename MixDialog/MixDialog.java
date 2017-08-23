@@ -1,14 +1,11 @@
 package cn.haodian.demowidget;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +61,7 @@ public class MixDialog {
      * @param content
      * @param maxDialogListener
      */
-    public void showConfirmDialog(final Context context, String title, String content, final ConfirmDialogListener maxDialogListener ){
+    public void showConfirmDialog(final Context context, String title, String content, final OnConfirmDialogListener maxDialogListener ){
 
         dialog=new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -198,7 +195,7 @@ public class MixDialog {
         dialog.show();
     }
 
-    public interface ConfirmDialogListener{
+    public interface OnConfirmDialogListener{
         void OnConfirm();
         void OnCancel();
     }
@@ -264,6 +261,7 @@ public class MixDialog {
                 if(anim!=null)
                     anim.stop();
                 anim=null;
+                resIds=null;
                 cancelDialogListener.OnCancel();
             }
         });
@@ -281,4 +279,68 @@ public class MixDialog {
     }
 
     //=============================================  wait dialog end  ==================================================
+
+
+
+    //============================================= tips dialog start ===================================================
+
+    public void showTipsDialog(String title_text, String content_text, String button_text, Context context, final OnTipsDialogListener mOnTipsDialogListener){
+        dialog=new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCanceledOnTouchOutside(false);
+        Window window = dialog.getWindow();
+
+        //大容器
+        LinearLayout dialogLayout = new LinearLayout(context);
+        dialogLayout.setOrientation(LinearLayout.VERTICAL);
+        dialogLayout.setGravity(Gravity.CENTER);
+        dialogLayout.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
+        dialogLayout.setPadding(50,40,40,40);
+
+        TextView tv_title=new TextView(context);
+        tv_title.setText(title_text);
+        tv_title.setGravity(Gravity.CENTER);
+        tv_title.setTextSize(17);
+        tv_title.setTextColor(Color.BLACK);
+
+        TextView tv_content=new TextView(context);
+        tv_content.setText(content_text);
+        tv_content.setTextSize(14);
+        tv_content.setPadding(0,30,0,40);
+
+        TextView tv_button=new TextView(context);
+        tv_button.setText(button_text);
+        tv_button.setGravity(Gravity.CENTER);
+        tv_button.setTextSize(15);
+        tv_button.setBackgroundColor(Color.CYAN);
+        tv_button.setPadding(30,30,30,30);
+        tv_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnTipsDialogListener.OnTipsClick();
+                dialog.dismiss();
+            }
+        });
+
+        dialogLayout.addView(tv_title);
+        dialogLayout.addView(tv_content);
+        dialogLayout.addView(tv_button);
+
+
+        //背景颜色
+        int roundRadius = 18; // 8dp 圆角半径
+        GradientDrawable backGround = new GradientDrawable();//创建drawable
+        backGround.setColor(Color.WHITE);
+        backGround.setCornerRadius(roundRadius);
+        backGround.setStroke(5,Color.WHITE);
+        dialogLayout.setBackground(backGround);
+        window.setContentView(dialogLayout);
+        dialog.show();
+    }
+
+    public interface OnTipsDialogListener{
+        void OnTipsClick();
+    }
+
+    //============================================= tips dialog end ===================================================
 }
