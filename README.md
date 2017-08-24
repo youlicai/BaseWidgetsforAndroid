@@ -1,4 +1,13 @@
 # 安卓开发各种常用自定义控件整理
-1.自定义toast 【XToast】
-d
-2.自定义dialog 【MixDialog】
+##【XToast】
+##【MixDialog】
+##【XCamera】
+##【TopBar】
+##【SlidePager】
+##【Permission】
+##【Dimens】
+##【ColumnView】
+##【XTabLayout】
+##【RefreshListView】
+##【MixDialog】
+##【FastHttp】
