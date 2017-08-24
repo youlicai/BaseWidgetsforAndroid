@@ -60,7 +60,7 @@ XCamera.takePictureCamera(this);
 XCamera.cropImage(this);
 ```
 
-######当前Activity onActivityResult处理
+###### 当前Activity onActivityResult处理
 ```
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
