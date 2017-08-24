@@ -5,6 +5,10 @@
 ### 自定义Toast样式，使用方式：XToast.show(this,"显示文字");
 【MixDialog】
 ----
+### 自定义Dialog，MixDialog有三个功能
+####### 1.确认取消弹框
+####### 2.加载等待框
+####### 3.信息确认弹框
 【XCamera】
 -
 【TopBar】
