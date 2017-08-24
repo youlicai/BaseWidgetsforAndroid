@@ -1,8 +1,8 @@
 # 安卓开发各种常用自定义控件整理
 
-【XToast】
+【XToast】###自定义Toast样式，使用方式：XToast.show(this,"显示文字");
 --
-自定义Toast样式，使用方式：XToast.show(this,"显示文字");
+
 【MixDialog】
 ----
 【XCamera】
