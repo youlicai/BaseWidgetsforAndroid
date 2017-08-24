@@ -8,7 +8,8 @@ XToast.show(this,"显示文字");
 ----
 ### 自定义Dialog，MixDialog有三个功能
 ###### 1.确认取消弹框，使用方式：
-MixDialog.getMixDialog().showConfirmDialog(this,"标题","内容",new OnConfirmDialogListener{}{
+```
+MixDialog.getMixDialog().showConfirmDialog(this,"标题","内容",new OnConfirmDialogListener(){
 		@Override
         public void OnConfirm() {
             Log.e("=====","OnConfirm");
@@ -19,6 +20,7 @@ MixDialog.getMixDialog().showConfirmDialog(this,"标题","内容",new OnConfirmD
             Log.e("=====","OnCancel");
         }
 })
+```
 ###### 2.加载等待框
 ###### 3.信息确认弹框
 
