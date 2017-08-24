@@ -24,7 +24,24 @@ MixDialog.getMixDialog().showConfirmDialog(this,"标题","内容",new OnConfirmD
 })
 ```
 ###### 2.加载等待框
+```
+MixDialog.getMixDialog().showWaitDialog(this, "加载中", new MixDialog.CancelDialogListener() {
+    @Override
+    public void OnCancel() {
+		Log.e("=====","OnCancel");
+    }
+});
+```
+
 ###### 3.信息确认弹框
+```
+MixDialog.getMixDialog().showTipsDialog("标题", "这是内容这是内容这是内容这是内容这是内容", "我知道了", this, new MixDialog.OnTipsDialogListener() {
+    @Override
+    public void OnTipsClick() {
+        Log.e("=====","OnTipsClick");
+    }
+}
+```
 
 
 【XCamera】
