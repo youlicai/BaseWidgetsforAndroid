@@ -46,6 +46,35 @@ MixDialog.getMixDialog().showTipsDialog("标题", "这是内容这是内容这�
 
 【XCamera】
 -
+### 简化获取图片方式：
+###### 1.从相册获取图片
+```
+XCamera.takePicturePhoto(this);
+```
+###### 2.拍照获取图片
+```
+XCamera.takePictureCamera(this);
+```
+###### 2.截取图片
+```
+XCamera.cropImage(this);
+```
+
+######当前Activity onActivityResult处理
+```
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        if (requestCode == XCamera.REQUEST_CODE_PICK_IMAGE) {
+            XCamera.cropPickImage(this,data.getData());
+        } else if (requestCode == XCamera.REQUEST_CODE_CAPTURE) {
+            XCamera.cropImage(this);
+        }else if(requestCode==XCamera.REQUEST_CODE_CROP){
+            image.setImageURI(XCamera.getUri());
+        }
+    }
+```
+
+
 【TopBar】
 -
 【SlidePager】
