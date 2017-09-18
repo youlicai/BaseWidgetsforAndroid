@@ -1,10 +1,14 @@
-package cn.haodian.demowidget;
+package pw.onlyou.easy;
+
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
-//放在android studio java->xxx根目录即可运行
+//放在
 public class Dimens {
 
     //基数越大越准
@@ -13,11 +17,15 @@ public class Dimens {
     private final static String VALUE_TEMPLATE = "values-{0}x{1}";
     private final static String FILE_NAME = "dimens.xml";
     private final static String dirStr = "./app/src/main/res";//androidStudio开发工具
-	/* 修改pxs即可*/
-    private final static String  pxs[]={"1080x1920","720x1280","480x854","540x960","720x1184","1080x1812","1080x1800","480x800","1080x1794","720x1200","720x1196"};
+
+    /* 修改pxs即可*/
+    private final static String  pxs[]={"1080x1920","1080x1720",
+                                        "1440x2560","1440x2360",
+                                        "1200x1920","1200x1720",
+                                        "720x1080",
+                                        "480x800"};
 
     public static void generateXmlFile() {
-
         for (String px:pxs) {
             StringBuffer sbForWidth = new StringBuffer();
             sbForWidth.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
