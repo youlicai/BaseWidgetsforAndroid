@@ -1,4 +1,4 @@
-package cn.haodian.demowidget.fasthttp;
+package pw.onlyou.easy.FastHttp;
 
 /**
  * Created by 立才 on 2017/1/17.

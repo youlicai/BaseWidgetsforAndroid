@@ -1,8 +1,8 @@
-package cn.haodian.demowidget.fasthttp;
+package pw.onlyou.easy.FastHttp;
 
 import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
-import android.util.Log;
+import android.util.LruCache;
+
 
 import com.android.volley.toolbox.ImageLoader;
 

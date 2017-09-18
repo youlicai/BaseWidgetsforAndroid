@@ -1,4 +1,4 @@
-package cn.haodian.demowidget.fasthttp;
+package pw.onlyou.easy.FastHttp;
 
 import android.content.Context;
 import android.widget.ImageView;

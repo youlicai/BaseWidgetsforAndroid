@@ -1,10 +1,7 @@
-package cn.haodian.demowidget.fasthttp;
+package pw.onlyou.easy.FastHttp;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Cache;
 import com.android.volley.DefaultRetryPolicy;
@@ -16,8 +13,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import org.json.JSONException;
-import org.json.JSONObject;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,21 +28,21 @@ public class HttpTools {
     private static HttpTools httpApi=new HttpTools();
     private RequestQueue requestQueue;
     private Gson gson = new Gson();
-    private JSONObject jsonObject;
 
     private HttpTools(){}
     public static HttpTools getHttpApi(){
         return httpApi;
     }
 
-    public void sendRequest(final String url,final int method, final boolean fromCache, final RequestBase model, Class class_, Context context, FastHttpInterface fastHttp){
+    public void sendRequest(final String url,final int method, final boolean fromCache, final RequestBase model, Class class_, Context context,FastHttpInterface fastHttp){
         if(null==requestQueue){
             requestQueue= Volley.newRequestQueue(context);
         }
         fastHttp.OnLoading();
-        printLog("\n 请求url:"+getRequestUrl(url,model));
+        String real_url=getRequestUrl(url,model);
+        printLog("\n 请求url:"+real_url);
         if(method==HttpConfig.GET){
-            sendRequestGet(requestQueue,url,fromCache,class_,fastHttp);
+            sendRequestGet(requestQueue,real_url,fromCache,class_,fastHttp);
         }else
             sendRequestPost(requestQueue,url,model,class_,fastHttp);
     }
@@ -63,7 +58,8 @@ public class HttpTools {
                         if (!(responseData instanceof ResponseError)) {
                             fastHttp.OnSuccess(responseData);
                         } else {
-                            fastHttp.OnFailed(new ResponseError());
+                            ResponseError err= (ResponseError) responseData;
+                            fastHttp.OnFailed(err);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -96,12 +92,13 @@ public class HttpTools {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String result) {
-                        ResponseBase responseData = analyzingJSON(result,
-                                        class_);
-                        if (!(responseData instanceof ResponseError)) {
-                            fastHttp.OnSuccess(responseData);
+                        printLog("请求内容为:"+result);
+                        ResponseBase resp = analyzingJSON(result, class_);
+                        if (!(resp instanceof ResponseError)) {
+                            fastHttp.OnSuccess(resp);
                         } else {
-                            fastHttp.OnFailed(new ResponseError());
+                            ResponseError err= (ResponseError) resp;
+                            fastHttp.OnFailed(err);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -161,8 +158,8 @@ public class HttpTools {
     private static void copyParam(RequestBase model,
                                   HashMap<String, String> params) {
         if (model != null) {
-            // Field[] fs = model.getClass().getDeclaredFields();
-            Field[] fs = model.getClass().getFields();
+             Field[] fs = model.getClass().getDeclaredFields();
+//            Field[] fs = model.getClass().getFields();
             if (fs != null) {
                 for (int k = 0; k < fs.length; k++) {
                     String key = fs[k].getName();
@@ -179,7 +176,8 @@ public class HttpTools {
                         e.printStackTrace();
                     }
                     if (value != null && (!value.equals(String.valueOf(FLAG)))) {
-                        params.put(key, value);
+                        if(!key.equals("serialVersionUID"))
+                            params.put(key, value);
                     }
                 }
             }
@@ -195,27 +193,22 @@ public class HttpTools {
 
     private ResponseBase analyzingJSON(String json, Class<ResponseBase> class_) {
         ResponseBase resp = null;
-        int code=200;
-        String msg="";
+
         if (isRightResponseInfo(json)) {
             try {
-                jsonObject = new JSONObject(json);
-                code=jsonObject.getInt(HttpConfig.getCodeTag());
-                msg=jsonObject.getString(HttpConfig.getMsgTag());
-                if(code==HttpConfig.REQUEST_SUCCESS){
-                    resp = gson.fromJson(json, class_);
+                resp = gson.fromJson(json, class_);
+                if(resp.is_resp_ok()){
                     return resp;
                 }
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 printLog("接口出问题！");
             }
         }
         ResponseError errRes = new ResponseError();
-        errRes.message = msg;
-        errRes.code=code;
-        resp = errRes;
-        return resp;
+        errRes.message = resp.get_message();
+        errRes.code=resp.get_code();
+        return errRes;
     }
 
     private String getRequestUrl(String url, RequestBase o) {
@@ -224,16 +217,21 @@ public class HttpTools {
         copyParam(o, params);
         Collection<String> keyset = params.keySet();
         List<String> list = new ArrayList<String>(keyset);
-        for (int i = 0; i < list.size(); i++) {
-            requestUrlParams += "/" + list.get(i) + "/"
+        url=url+"?";
+        int list_size=list.size();
+        for (int i = 0; i < list_size; i++) {
+            requestUrlParams += list.get(i) + "="
                     + params.get(list.get(i));
+            if(i<list_size-1){
+                requestUrlParams +="&";
+            }
         }
         return url + requestUrlParams;
 
     }
 
 
-    interface FastHttpInterface{
+    public interface FastHttpInterface{
         void OnSuccess(ResponseBase resp);
         void OnFailed(ResponseError err);
         void OnLoading();
